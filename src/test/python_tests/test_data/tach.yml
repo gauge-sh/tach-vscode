@@ -1,7 +1,10 @@
-constraints:
-- tag: sample2
-  depends_on:
-  - sample1
+modules:
+- path: sample1
+  depends_on: []
+  strict: true
+- path: sample2
+  depends_on: []
+  strict: false
 exclude:
 - docs
 - tests

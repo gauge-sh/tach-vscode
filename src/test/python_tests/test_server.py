@@ -23,40 +23,34 @@ TIMEOUT = 10  # 10 seconds
         (
             constants.TEST_DATA / "sample1" / "sample.py",
             {
-                "uri": utils.as_uri(str(constants.TEST_DATA / "sample1" / "sample.py")),
+                "uri": "file:///Users/caeleanbarnes/Projects/Work/dev/tach-vscode/src/test/python_tests/test_data/sample1/sample.py",
                 "diagnostics": [
                     {
                         "range": {
                             "start": {"line": 2, "character": 0},
                             "end": {"line": 2, "character": 99999},
                         },
-                        "message": "Cannot import 'sample2.sample2.SAMPLE2'. Tags ['sample1'] "
-                        "cannot depend on ['sample2'].",
+                        "message": "Cannot import 'sample2.sample2.SAMPLE2'. Module 'sample1' cannot depend on 'sample2'.",
                         "severity": 1,
-                        "source": SERVER_INFO["module"],
-                    },
+                        "source": "tach",
+                    }
                 ],
             },
         ),
         (
             constants.TEST_DATA / "sample2" / "sample2.py",
             {
-                "uri": utils.as_uri(
-                    str(constants.TEST_DATA / "sample2" / "sample2.py")
-                ),
+                "uri": "file:///Users/caeleanbarnes/Projects/Work/dev/tach-vscode/src/test/python_tests/test_data/sample2/sample2.py",
                 "diagnostics": [
                     {
                         "range": {
                             "start": {"line": 2, "character": 0},
                             "end": {"line": 2, "character": 99999},
                         },
-                        "message": "Package 'sample1' is in strict mode. Only imports from the "
-                        "root of this package are allowed. The import "
-                        "'sample1.sample.SAMPLE1' (in 'sample2.sample2') is not "
-                        "included in __all__.",
+                        "message": "Module 'sample1' is in strict mode. Only imports from the public interface of this module are allowed. The import 'sample1.sample.SAMPLE1' (in module 'sample2') is not included in __all__.",
                         "severity": 1,
-                        "source": SERVER_INFO["module"],
-                    },
+                        "source": "tach",
+                    }
                 ],
             },
         ),
