@@ -23,7 +23,7 @@ TIMEOUT = 10  # 10 seconds
         (
             constants.TEST_DATA / "sample1" / "sample.py",
             {
-                "uri": "file:///Users/caeleanbarnes/Projects/Work/dev/tach-vscode/src/test/python_tests/test_data/sample1/sample.py",
+                "uri": utils.as_uri(str(constants.TEST_DATA / "sample1" / "sample.py")),
                 "diagnostics": [
                     {
                         "range": {
@@ -40,7 +40,7 @@ TIMEOUT = 10  # 10 seconds
         (
             constants.TEST_DATA / "sample2" / "sample2.py",
             {
-                "uri": "file:///Users/caeleanbarnes/Projects/Work/dev/tach-vscode/src/test/python_tests/test_data/sample2/sample2.py",
+                "uri": utils.as_uri(str(constants.TEST_DATA / "sample1" / "sample2.py")),
                 "diagnostics": [
                     {
                         "range": {
