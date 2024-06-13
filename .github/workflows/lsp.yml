@@ -31,11 +31,9 @@ jobs:
     - name: Setup extension
       run: |
         source .venv/bin/activate
-        cd lsp/vscode
         nox --session setup
         npm install
     - name: Test with nox
       run: |
         source .venv/bin/activate
-        cd lsp/vscode
         nox --session tests
