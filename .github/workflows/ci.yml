@@ -1,4 +1,4 @@
-name: lsp
+name: ci
 
 on:
   push:
