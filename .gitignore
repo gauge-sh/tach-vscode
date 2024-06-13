@@ -1,0 +1,13 @@
+.DS_Store
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+.venv/
+.vs/
+.nox/
+bundled/libs/
+**/__pycache__
+**/.pytest_cache
+**/.vs
