@@ -40,7 +40,7 @@ TIMEOUT = 10  # 10 seconds
         (
             constants.TEST_DATA / "sample2" / "sample2.py",
             {
-                "uri": utils.as_uri(str(constants.TEST_DATA / "sample1" / "sample2.py")),
+                "uri": utils.as_uri(str(constants.TEST_DATA / "sample2" / "sample2.py")),
                 "diagnostics": [
                     {
                         "range": {
