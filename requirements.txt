@@ -190,7 +190,7 @@ rich==13.7.1 \
     --hash=sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222 \
     --hash=sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432
     # via tach
-tach==0.5.1 \
+tach==0.5.2 \
     --hash=sha256:073a1f3385205109cdf810163ab3063f636ca1730eb781a4eb207e656dec83bb \
     --hash=sha256:08e0afd2f5475b1a3a95def3ec42ccedfd1493c0994a0779259ecd0fa728e0f6 \
     --hash=sha256:0aa3a83dbafde911dea38c5b97fb73db0c86be6d560fa8ec4572bf36dd94d789 \
