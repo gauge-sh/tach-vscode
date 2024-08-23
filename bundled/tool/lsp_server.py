@@ -11,6 +11,7 @@ import pathlib
 import sys
 import traceback
 from typing import Any
+from tach.check import CheckResult
 
 
 # **********************************************************
@@ -99,30 +100,25 @@ def did_close(params: lsp.DidCloseTextDocumentParams) -> None:
 
 
 def _linting_helper(document: workspace.Document) -> list[lsp.Diagnostic]:
-    boundary_errors = _run_tool_on_document(document)
-    return (
-        _parse_boundary_errors(boundary_errors, document.uri) if boundary_errors else []
-    )
+    checked_result = _run_tool_on_document(document)
+    return _parse_boundary_errors(checked_result, document.uri)
 
 
-def _parse_boundary_errors(boundary_errors, uri):
+def _parse_boundary_errors(checked_result: CheckResult, uri):
     diagnostics = []
-    for boundary_error in boundary_errors:
-        if (
-            boundary_error.file_path in uri
-            and boundary_error.error_info.exception_message
-        ):
+    for err in checked_result.errors:
+        if str(err.file_path) in uri and err.error_info.exception_message:
             start = lsp.Position(
-                line=boundary_error.line_number - 1,
+                line=err.line_number - 1,
                 character=0,
             )
-            end = lsp.Position(line=boundary_error.line_number - 1, character=99999)
+            end = lsp.Position(line=err.line_number - 1, character=99999)
             diagnostic = lsp.Diagnostic(
                 range=lsp.Range(
                     start=start,
                     end=end,
                 ),
-                message=boundary_error.error_info.exception_message,
+                message=err.error_info.exception_message,
                 severity=lsp.DiagnosticSeverity.Error,
                 source=TOOL_MODULE,
             )

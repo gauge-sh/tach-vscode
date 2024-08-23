@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from tach.check import BoundaryError, check
+from tach.check import CheckResult, check
 from tach.cli import parse_arguments
 from tach.colors import BCOLORS
 from tach.constants import CONFIG_FILE_NAME
@@ -11,9 +11,7 @@ from tach.parsing import parse_project_config
 
 def run_tach_check(argv: list[str], path: str):
     args, _ = parse_arguments(argv[1:])
-    root = args.root
-    if args.root == ".":
-        root = find_project_config_root(path)
+    root = find_project_config_root()
     if not root:
         raise TachSetupError("Project config root not found")
     exclude_paths = args.exclude.split(",") if getattr(args, "exclude", None) else None
@@ -28,12 +26,10 @@ def run_tach_check(argv: list[str], path: str):
     else:
         exclude_paths = project_config.exclude
 
-    boundary_errors: list[BoundaryError] = check(
-        root,
-        project_config,
-        exclude_paths=exclude_paths,
+    checked_result: CheckResult = check(
+        project_root=root, project_config=project_config, exclude_paths=exclude_paths
     )
-    for boundary_error in boundary_errors:
+    for boundary_error in checked_result.errors:
         # Hack for now - update error message displayed to user
         error_info = boundary_error.error_info
         if (
@@ -44,4 +40,4 @@ def run_tach_check(argv: list[str], path: str):
                 f"Cannot import '{boundary_error.import_mod_path}'. "
                 f"Module '{error_info.source_module}' cannot depend on '{error_info.invalid_module}'."
             )
-    return boundary_errors
+    return checked_result
