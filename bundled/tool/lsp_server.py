@@ -11,7 +11,11 @@ import pathlib
 import sys
 import traceback
 from typing import Any
-from tach.check import CheckResult
+
+try:
+    from tach.check import CheckResult
+except ImportError:
+    pass
 
 
 # **********************************************************
