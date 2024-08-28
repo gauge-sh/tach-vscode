@@ -11,7 +11,11 @@ import pathlib
 import sys
 import traceback
 from typing import Any
-from tach.check import CheckResult
+
+try:
+    from tach.check import CheckResult
+except ImportError:
+    pass
 
 
 # **********************************************************
@@ -104,7 +108,9 @@ def _linting_helper(document: workspace.Document) -> list[lsp.Diagnostic]:
     return _parse_boundary_errors(checked_result, document.uri)
 
 
-def _parse_boundary_errors(checked_result: CheckResult, uri):
+def _parse_boundary_errors(checked_result: CheckResult | None, uri):
+    if checked_result is None:
+        return []
     diagnostics = []
     for err in checked_result.errors:
         if str(err.file_path) in uri and err.error_info.exception_message:

@@ -18,7 +18,7 @@ def run_tach_check(argv: list[str], path: str):
     project_config = parse_project_config(root=root)
     if project_config is None:
         raise TachSetupError(
-            f"{BCOLORS.FAIL} {CONFIG_FILE_NAME}.(yml|yaml) not found in {root}{BCOLORS.ENDC}",
+            f"{BCOLORS.FAIL} {CONFIG_FILE_NAME}.(toml) not found in {root}{BCOLORS.ENDC}",
         )
 
     if exclude_paths is not None and project_config.exclude is not None:
@@ -27,7 +27,7 @@ def run_tach_check(argv: list[str], path: str):
         exclude_paths = project_config.exclude
 
     checked_result: CheckResult = check(
-        project_root=root, project_config=project_config, exclude_paths=exclude_paths
+        project_root=root, project_config=project_config
     )
     for boundary_error in checked_result.errors:
         # Hack for now - update error message displayed to user

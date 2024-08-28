@@ -65,7 +65,7 @@ def test_import_example(test_file_path, expected):
     contents = test_file_path.read_text()
 
     actual = []
-    with session.LspSession() as ls_session:
+    with session.LspSession(cwd=constants.TEST_DATA) as ls_session:
         ls_session.initialize(defaults.VSCODE_DEFAULT_INITIALIZE)
 
         done = Event()
