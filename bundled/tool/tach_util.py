@@ -27,7 +27,7 @@ def run_tach_check(argv: list[str], path: str):
         exclude_paths = project_config.exclude
 
     checked_result: CheckResult = check(
-        project_root=root, project_config=project_config
+        project_root=root, project_config=project_config, exclude_paths=exclude_paths
     )
     for boundary_error in checked_result.errors:
         # Hack for now - update error message displayed to user
