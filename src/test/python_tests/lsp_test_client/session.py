@@ -79,7 +79,7 @@ class LspSession(MethodDispatcher):
         return self
 
     def __exit__(self, typ, value, _tb):
-        if self._sub.returncode is None:
+        if self._sub.returncode is None:  # pyright: ignore
             self.shutdown(True)
         try:
             self._sub.terminate()  # pyright: ignore
@@ -91,8 +91,8 @@ class LspSession(MethodDispatcher):
         self._thread_pool.shutdown()
 
     def _monitor_subprocess(self):
-        self._sub.wait()
-        if self._sub.returncode != 0:
+        self._sub.wait()  # pyright: ignore
+        if self._sub.returncode != 0:  # pyright: ignore
             self.server_initialized.set()
 
     def initialize(
