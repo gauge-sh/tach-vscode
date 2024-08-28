@@ -114,7 +114,7 @@ jobs:
       - run: ls -al ./dist
 
       # Install Node dependencies.
-      - run: cd npm install
+      - run: npm install
 
       # Publish to the Code Marketplace.
       - name: Publish Extension
