@@ -75,10 +75,12 @@ class LspSession(MethodDispatcher):
         }
         self._endpoint = Endpoint(dispatcher, self._writer.write)
         self._thread_pool.submit(self._reader.listen, self._endpoint.consume)
+        self._monitoring_future = self._thread_pool.submit(self._monitor_subprocess)
         return self
 
     def __exit__(self, typ, value, _tb):
-        self.shutdown(True)
+        if self._sub.returncode is None:
+            self.shutdown(True)
         try:
             self._sub.terminate()  # pyright: ignore
         except Exception:
@@ -88,6 +90,11 @@ class LspSession(MethodDispatcher):
         self._endpoint.shutdown()
         self._thread_pool.shutdown()
 
+    def _monitor_subprocess(self):
+        self._sub.wait()
+        if self._sub.returncode != 0:
+            self.server_initialized.set()
+
     def initialize(
         self,
         initialize_params=None,
@@ -96,13 +103,13 @@ class LspSession(MethodDispatcher):
         """Sends the initialize request to LSP server."""
         if initialize_params is None:
             initialize_params = VSCODE_DEFAULT_INITIALIZE
-        server_initialized = Event()
+        self.server_initialized = Event()
 
         def _after_initialize(fut):
             if process_server_capabilities:
                 process_server_capabilities(fut.result())
             self.initialized()
-            server_initialized.set()
+            self.server_initialized.set()
 
         self._send_request(
             "initialize",
@@ -114,7 +121,7 @@ class LspSession(MethodDispatcher):
             handle_response=_after_initialize,
         )
 
-        server_initialized.wait()
+        self.server_initialized.wait()
 
     def initialized(self, initialized_params=None):
         """Sends the initialized notification to LSP server."""
