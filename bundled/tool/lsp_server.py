@@ -113,7 +113,7 @@ def _parse_boundary_errors(checked_result: CheckResult | None, uri):
         return []
     diagnostics = []
     for err in checked_result.errors:
-        if str(err.file_path) in uri and err.error_info.exception_message:
+        if str(err.file_path) in uri and err.error_info.to_pystring():
             start = lsp.Position(
                 line=err.line_number - 1,
                 character=0,
@@ -124,7 +124,7 @@ def _parse_boundary_errors(checked_result: CheckResult | None, uri):
                     start=start,
                     end=end,
                 ),
-                message=err.error_info.exception_message,
+                message=err.error_info.to_pystring(),
                 severity=lsp.DiagnosticSeverity.Error,
                 source=TOOL_MODULE,
             )
