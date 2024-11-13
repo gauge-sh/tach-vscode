@@ -1,12 +1,16 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
-from tach.check import CheckResult, check
+from tach.extension import check
+from tach.parsing.config import parse_project_config
 from tach.cli import parse_arguments
 from tach.colors import BCOLORS
 from tach.constants import CONFIG_FILE_NAME
 from tach.errors import TachSetupError
 from tach.filesystem import find_project_config_root
-from tach.parsing import parse_project_config
+
+if TYPE_CHECKING:
+    from tach.extension import CheckResult
 
 
 def run_tach_check(argv: list[str], path: str):
@@ -29,15 +33,4 @@ def run_tach_check(argv: list[str], path: str):
     checked_result: CheckResult = check(
         project_root=root, project_config=project_config, exclude_paths=exclude_paths
     )
-    for boundary_error in checked_result.errors:
-        # Hack for now - update error message displayed to user
-        error_info = boundary_error.error_info
-        if (
-            not error_info.exception_message
-            and boundary_error.error_info.is_dependency_error
-        ):
-            error_info.exception_message = (
-                f"Cannot import '{boundary_error.import_mod_path}'. "
-                f"Module '{error_info.source_module}' cannot depend on '{error_info.invalid_module}'."
-            )
     return checked_result
