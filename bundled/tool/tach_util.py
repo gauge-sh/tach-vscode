@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 from tach.extension import check
 from tach.parsing.config import parse_project_config
@@ -8,6 +9,8 @@ from tach.constants import CONFIG_FILE_NAME
 from tach.errors import TachSetupError
 from tach.filesystem import find_project_config_root
 
+if TYPE_CHECKING:
+    from tach.extension import CheckResult
 
 def run_tach_check(argv: list[str], path: str):
     args, _ = parse_arguments(argv[1:])
@@ -26,7 +29,7 @@ def run_tach_check(argv: list[str], path: str):
     else:
         exclude_paths = project_config.exclude
 
-    checked_result = check(
+    checked_result: CheckResult = check(
         project_root=root, project_config=project_config, exclude_paths=exclude_paths
     )
     return checked_result

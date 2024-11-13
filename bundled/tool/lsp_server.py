@@ -10,12 +10,10 @@ import os
 import pathlib
 import sys
 import traceback
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-try:
+if TYPE_CHECKING:
     from tach.extension import CheckResult
-except ImportError:
-    pass
 
 
 # **********************************************************
