@@ -12,6 +12,7 @@ from tach.filesystem import find_project_config_root
 if TYPE_CHECKING:
     from tach.extension import CheckResult
 
+
 def run_tach_check(argv: list[str], path: str):
     args, _ = parse_arguments(argv[1:])
     root = find_project_config_root()
