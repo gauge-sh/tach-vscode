@@ -13,7 +13,7 @@ import traceback
 from typing import Any
 
 try:
-    from tach.check import CheckResult
+    from tach.extension import CheckResult
 except ImportError:
     pass
 
