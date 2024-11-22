@@ -27,7 +27,7 @@ jobs:
             target: arm-unknown-linux-gnueabihf
             code-target: linux-armhf
             arch: armv7
-          - os: macos-latest
+          - os: macos-13
             target: x86_64-apple-darwin
             code-target: darwin-x64
           - os: macos-14
