@@ -31,6 +31,10 @@ def run_tach_check(argv: list[str], path: str):
         exclude_paths = project_config.exclude
 
     checked_result: CheckResult = check(
-        project_root=root, project_config=project_config, exclude_paths=exclude_paths
+        project_root=root,
+        project_config=project_config,
+        dependencies=True,
+        interfaces=False,
+        exclude_paths=exclude_paths,
     )
     return checked_result
