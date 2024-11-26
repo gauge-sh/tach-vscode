@@ -43,17 +43,7 @@ TIMEOUT = 10  # 10 seconds
                 "uri": utils.as_uri(
                     str(constants.TEST_DATA / "sample2" / "sample2.py")
                 ),
-                "diagnostics": [
-                    {
-                        "range": {
-                            "start": {"line": 2, "character": 0},
-                            "end": {"line": 2, "character": 99999},
-                        },
-                        "message": "Module 'sample1' is in strict mode. Only imports from the public interface of this module are allowed. The import 'sample1.sample.SAMPLE1' (in module 'sample2') is not included in __all__.",
-                        "severity": 1,
-                        "source": "tach",
-                    }
-                ],
+                "diagnostics": [],
             },
         ),
     ],

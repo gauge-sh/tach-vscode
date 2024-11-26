@@ -1,7 +1,3 @@
-modules = [
-    { path = "sample1", depends_on = [], strict = true },
-    { path = "sample2", depends_on = [] },
-]
 exclude = [
     "docs",
     "tests",
@@ -10,3 +6,19 @@ source_roots = [
     ".",
 ]
 ignore_type_checking_imports = false
+
+[[modules]]
+path = "sample1"
+depends_on = []
+
+[[modules]]
+path = "sample2"
+depends_on = [
+    { path = "sample1" }
+]
+
+[[interfaces]]
+expose = []
+from = [
+    "sample1",
+]
