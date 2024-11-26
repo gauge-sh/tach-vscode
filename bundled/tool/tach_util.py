@@ -34,7 +34,7 @@ def run_tach_check(argv: list[str], path: str):
         project_root=root,
         project_config=project_config,
         dependencies=True,
-        interfaces=False,
+        interfaces=True,
         exclude_paths=exclude_paths,
     )
     return checked_result
