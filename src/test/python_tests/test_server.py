@@ -14,7 +14,7 @@ from hamcrest import assert_that, is_
 from .lsp_test_client import constants, defaults, session, utils
 
 SERVER_INFO = utils.get_server_info_defaults()
-TIMEOUT = 10  # 10 seconds
+TIMEOUT = 2  # 2 seconds
 
 
 @pytest.mark.parametrize(
@@ -43,7 +43,17 @@ TIMEOUT = 10  # 10 seconds
                 "uri": utils.as_uri(
                     str(constants.TEST_DATA / "sample2" / "sample2.py")
                 ),
-                "diagnostics": [],
+                "diagnostics": [
+                    {
+                        "range": {
+                            "start": {"line": 2, "character": 0},
+                            "end": {"line": 2, "character": 99999},
+                        },
+                        "message": "Module 'sample1' has a defined public interface. Only imports from the public interface of this module are allowed. The import 'sample1.sample.SAMPLE1' (in module 'sample2') is not public.",
+                        "severity": 1,
+                        "source": "tach",
+                    }
+                ],
             },
         ),
     ],

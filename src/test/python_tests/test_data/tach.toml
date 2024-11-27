@@ -18,7 +18,7 @@ depends_on = [
 ]
 
 [[interfaces]]
-expose = []
+expose = ["other"]
 from = [
     "sample1",
 ]

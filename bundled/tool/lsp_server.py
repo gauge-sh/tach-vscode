@@ -274,7 +274,7 @@ def _run_tool_on_document(
         except Exception:
             log_error(traceback.format_exc(chain=True))
             raise
-    log_to_output(f"{document.uri} :\r\n{str(boundary_errors)}")
+    log_to_output(f"{document.uri} :\r\n{str(boundary_errors.errors)}")
     return boundary_errors
 
 
