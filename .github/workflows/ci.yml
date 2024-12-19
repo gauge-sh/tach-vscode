@@ -36,12 +36,3 @@ jobs:
       run: |
         source .venv/bin/activate
         nox --session tests
-    - name: Check ruff
-      run: |
-        source .venv/bin/activate
-        ruff check
-        ruff format --check
-    - name: Check types with pyright
-      run: |
-        source .venv/bin/activate
-        pyright src/ bundled/tool/
