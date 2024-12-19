@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import * as fsapi from 'fs-extra';
 import { Disposable, env, LogOutputChannel } from 'vscode';
 import { State } from 'vscode-languageclient';
 import {
@@ -10,9 +9,8 @@ import {
     RevealOutputChannelOn,
     ServerOptions,
 } from 'vscode-languageclient/node';
-import { DEBUG_SERVER_SCRIPT_PATH, SERVER_SCRIPT_PATH } from './constants';
+import { BUNDLED_PYTHON_LIBS_DIR } from './constants';
 import { traceError, traceInfo, traceVerbose } from './log/logging';
-import { getDebuggerPath } from './python';
 import { getExtensionSettings, getGlobalSettings, getWorkspaceSettings, ISettings } from './settings';
 import { getLSClientTraceLevel, getProjectRoot } from './utilities';
 import { isVirtualWorkspace } from './vscodeapi';
@@ -28,27 +26,15 @@ async function createServer(
 ): Promise<LanguageClient> {
     const command = settings.interpreter[0];
     const cwd = settings.cwd;
-
-    // Set debugger path needed for debugging python code.
     const newEnv = { ...process.env };
-    const debuggerPath = await getDebuggerPath();
-    const isDebugScript = await fsapi.pathExists(DEBUG_SERVER_SCRIPT_PATH);
-    if (newEnv.USE_DEBUGPY && debuggerPath) {
-        newEnv.DEBUGPY_PATH = debuggerPath;
-    } else {
-        newEnv.USE_DEBUGPY = 'False';
-    }
 
-    // Set import strategy
     newEnv.LS_IMPORT_STRATEGY = settings.importStrategy;
 
-    // Set notification type
-    newEnv.LS_SHOW_NOTIFICATION = settings.showNotifications;
+    if (settings.importStrategy === 'useBundled') {
+        newEnv.PYTHONPATH = BUNDLED_PYTHON_LIBS_DIR;
+    }
 
-    const args =
-        newEnv.USE_DEBUGPY === 'False' || !isDebugScript
-            ? settings.interpreter.slice(1).concat([SERVER_SCRIPT_PATH])
-            : settings.interpreter.slice(1).concat([DEBUG_SERVER_SCRIPT_PATH]);
+    const args = settings.interpreter.slice(1).concat(["-m", "tach", "server"]);
     traceInfo(`Server run command: ${[command, ...args].join(' ')}`);
 
     const serverOptions: ServerOptions = {
@@ -65,8 +51,6 @@ async function createServer(
             : [
                   { scheme: 'file', language: 'python' },
                   { scheme: 'untitled', language: 'python' },
-                  { scheme: 'vscode-notebook', language: 'python' },
-                  { scheme: 'vscode-notebook-cell', language: 'python' },
               ],
         outputChannel: outputChannel,
         traceOutputChannel: outputChannel,

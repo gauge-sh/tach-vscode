@@ -16,7 +16,7 @@ from pyls_jsonrpc.dispatchers import MethodDispatcher
 from pyls_jsonrpc.endpoint import Endpoint
 from pyls_jsonrpc.streams import JsonRpcStreamReader, JsonRpcStreamWriter
 
-from .constants import PROJECT_ROOT
+from .constants import BUNDLED_PYTHON_LIBS_DIR
 from .defaults import VSCODE_DEFAULT_INITIALIZE
 
 LSP_EXIT_TIMEOUT = 5000
@@ -30,7 +30,7 @@ WINDOW_SHOW_MESSAGE = "window/showMessage"
 class LspSession(MethodDispatcher):
     """Send and Receive messages over LSP as a test LS Client."""
 
-    def __init__(self, cwd=None, script=None):
+    def __init__(self, cwd=None):
         self.cwd = cwd if cwd else os.getcwd()
 
         self._thread_pool = ThreadPoolExecutor()
@@ -39,9 +39,6 @@ class LspSession(MethodDispatcher):
         self._reader = None
         self._endpoint = None
         self._notification_callbacks = {}
-        self.script = (
-            script if script else (PROJECT_ROOT / "bundled" / "tool" / "lsp_server.py")
-        )
 
     def __enter__(self):
         """Context manager entrypoint.
@@ -49,13 +46,15 @@ class LspSession(MethodDispatcher):
         shell=True needed for pytest-cov to work in subprocess.
         """
 
+        env_copy = os.environ.copy()
+        env_copy["PYTHONPATH"] = str(BUNDLED_PYTHON_LIBS_DIR)
         self._sub = subprocess.Popen(
-            [sys.executable, str(self.script)],
+            [sys.executable, "-m", "tach", "server"],
             stdout=subprocess.PIPE,
             stdin=subprocess.PIPE,
             bufsize=0,
             cwd=self.cwd,
-            env=os.environ,
+            env=env_copy,
             shell="WITH_COVERAGE" in os.environ,
         )
         if self._sub.stdin is not None and self._sub.stdout is not None:
