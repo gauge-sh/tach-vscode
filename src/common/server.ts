@@ -34,6 +34,10 @@ async function createServer(
         newEnv.PYTHONPATH = BUNDLED_PYTHON_LIBS_DIR;
     }
 
+    if (settings.configuration) {
+        newEnv.TACH_CONFIGURATION = settings.configuration;
+    }
+
     const args = settings.interpreter.slice(1).concat(["-m", "tach", "server"]);
     traceInfo(`Server run command: ${[command, ...args].join(' ')}`);
 
