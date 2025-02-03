@@ -64,7 +64,7 @@ export async function getWorkspaceSettings(
         cwd: workspace.uri.fsPath,
         workspace: workspace.uri.toString(),
         interpreter: resolveVariables(interpreter, workspace),
-        importStrategy: config.get<ImportStrategy>(`importStrategy`) ?? 'useBundled',
+        importStrategy: config.get<ImportStrategy>(`importStrategy`) ?? 'fromEnvironment',
     };
     return workspaceSetting;
 }
