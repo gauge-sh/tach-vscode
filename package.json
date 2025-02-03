@@ -69,7 +69,7 @@
         "configuration": {
             "properties": {
                 "tach.importStrategy": {
-                    "default": "useBundled",
+                    "default": "fromEnvironment",
                     "description": "Defines where `tach` is imported from. This setting may be ignored if `tach.path` is set.",
                     "enum": [
                         "useBundled",
