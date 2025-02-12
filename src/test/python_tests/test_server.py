@@ -30,7 +30,7 @@ TIMEOUT = 2  # 2 seconds
                             "start": {"line": 2, "character": 0},
                             "end": {"line": 2, "character": 99999},
                         },
-                        "message": "Cannot import 'sample2.sample2.SAMPLE2'. Module 'sample1' cannot depend on 'sample2'.",
+                        "message": "Cannot use 'sample2.sample2.SAMPLE2'. Module 'sample1' cannot depend on 'sample2'.",
                         "severity": 1,
                         "source": "tach",
                     }
@@ -45,11 +45,11 @@ TIMEOUT = 2  # 2 seconds
                 ),
                 "diagnostics": [
                     {
+                        "message": "The path 'sample1.sample.SAMPLE1' is not part of the public interface for 'sample1'.",
                         "range": {
                             "start": {"line": 2, "character": 0},
                             "end": {"line": 2, "character": 99999},
                         },
-                        "message": "Module 'sample1' has a defined public interface. Only imports from the public interface of this module are allowed. The import 'sample1.sample.SAMPLE1' (in module 'sample2') is not public.",
                         "severity": 1,
                         "source": "tach",
                     }

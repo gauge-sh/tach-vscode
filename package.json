@@ -90,6 +90,12 @@
                         "type": "string"
                     },
                     "type": "array"
+                },
+                "tach.configuration": {
+                    "default": "",
+                    "description": "Path to a `tach.toml` file to use for configuration. By default, the extension will mirror the behavior that the `tach` CLI would have.",
+                    "scope": "resource",
+                    "type": "string"
                 }
             }
         },
