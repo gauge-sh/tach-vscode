@@ -1,6 +1,6 @@
 pip==24.0
 pytest==8.2.2
-tach==0.19.1
+tach>=0.25.2
 # LSP
 nox==2024.4.15
 debugpy==1.8.1
