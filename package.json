@@ -69,7 +69,7 @@
         "configuration": {
             "properties": {
                 "tach.importStrategy": {
-                    "default": "useBundled",
+                    "default": "fromEnvironment",
                     "description": "Defines where `tach` is imported from. This setting may be ignored if `tach.path` is set.",
                     "enum": [
                         "useBundled",
@@ -90,6 +90,12 @@
                         "type": "string"
                     },
                     "type": "array"
+                },
+                "tach.configuration": {
+                    "default": "",
+                    "description": "Path to a `tach.toml` file to use for configuration. By default, the extension will mirror the behavior that the `tach` CLI would have.",
+                    "scope": "resource",
+                    "type": "string"
                 }
             }
         },

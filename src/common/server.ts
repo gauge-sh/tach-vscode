@@ -14,8 +14,29 @@ import { traceError, traceInfo, traceVerbose } from './log/logging';
 import { getExtensionSettings, getGlobalSettings, getWorkspaceSettings, ISettings } from './settings';
 import { getLSClientTraceLevel, getProjectRoot } from './utilities';
 import { isVirtualWorkspace } from './vscodeapi';
+import { execFile } from 'child_process';
+import { supportsCustomConfig, VersionInfo } from './version';
 
 export type IInitOptions = { settings: ISettings[]; globalSettings: ISettings };
+
+function executeCommand(file: string, args: string[] = []): Promise<string> {
+    return new Promise((resolve, reject) => {
+      execFile(file, args, (error, stdout, stderr) => {
+        if (error) {
+          reject(new Error(stderr || error.message));
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
+}
+
+async function getTachVersion(pythonExecutable: string): Promise<VersionInfo> {
+    const stdout = await executeCommand(pythonExecutable, ["-m", "tach", "--version"]);
+    const version = stdout.trim().split(" ")[1];
+    const [major, minor, patch] = version.split(".").map((x) => parseInt(x, 10));
+    return new VersionInfo(major, minor, patch);
+  }
 
 async function createServer(
     settings: ISettings,
@@ -34,7 +55,19 @@ async function createServer(
         newEnv.PYTHONPATH = BUNDLED_PYTHON_LIBS_DIR;
     }
 
+
     const args = settings.interpreter.slice(1).concat(["-m", "tach", "server"]);
+
+    if (settings.configuration) {
+        const version = await getTachVersion(command);
+        if (!supportsCustomConfig(version)) {
+            traceError(`Server: Tach version ${version.toString()} does not support custom configuration files.`);
+        } else {
+            traceInfo(`Server: Using custom configuration file: ${settings.configuration}`);
+            args.push("-c", settings.configuration);
+        }
+    }
+
     traceInfo(`Server run command: ${[command, ...args].join(' ')}`);
 
     const serverOptions: ServerOptions = {

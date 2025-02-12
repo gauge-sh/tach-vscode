@@ -12,6 +12,7 @@ export interface ISettings {
     workspace: string;
     interpreter: string[];
     importStrategy: ImportStrategy;
+    configuration: string | null;
 }
 
 export function getExtensionSettings(namespace: string, includeInterpreter?: boolean): Promise<ISettings[]> {
@@ -64,7 +65,8 @@ export async function getWorkspaceSettings(
         cwd: workspace.uri.fsPath,
         workspace: workspace.uri.toString(),
         interpreter: resolveVariables(interpreter, workspace),
-        importStrategy: config.get<ImportStrategy>(`importStrategy`) ?? 'useBundled',
+        importStrategy: config.get<ImportStrategy>(`importStrategy`) ?? 'fromEnvironment',
+        configuration: config.get<string>(`configuration`) ?? null,
     };
     return workspaceSetting;
 }
@@ -90,6 +92,7 @@ export async function getGlobalSettings(namespace: string, includeInterpreter?: 
         workspace: process.cwd(),
         interpreter: interpreter,
         importStrategy: getGlobalValue<ImportStrategy>(config, 'importStrategy', 'useBundled'),
+        configuration: getGlobalValue<string | null>(config, 'configuration', null),
     };
     return setting;
 }
