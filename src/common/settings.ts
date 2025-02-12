@@ -67,6 +67,7 @@ export async function getWorkspaceSettings(
         interpreter: resolveVariables(interpreter, workspace),
         importStrategy: config.get<ImportStrategy>(`importStrategy`) ?? 'fromEnvironment',
         configuration: config.get<string>(`configuration`) ?? null,
+
     };
     return workspaceSetting;
 }
