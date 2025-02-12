@@ -102,6 +102,7 @@ export function checkIfConfigurationChanged(e: ConfigurationChangeEvent, namespa
     const settings = [
         `${namespace}.interpreter`,
         `${namespace}.importStrategy`,
+        `${namespace}.configuration`,
     ];
     const changed = settings.map((s) => e.affectsConfiguration(s));
     return changed.includes(true);
