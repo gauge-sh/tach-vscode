@@ -19,7 +19,9 @@ from pyls_jsonrpc.streams import JsonRpcStreamReader, JsonRpcStreamWriter
 from .constants import BUNDLED_PYTHON_LIBS_DIR
 from .defaults import VSCODE_DEFAULT_INITIALIZE
 
-LSP_EXIT_TIMEOUT = 5000
+# Measured in seconds
+LSP_INIT_TIMEOUT = 1
+LSP_EXIT_TIMEOUT = 5
 
 
 PUBLISH_DIAGNOSTICS = "textDocument/publishDiagnostics"
@@ -120,7 +122,8 @@ class LspSession(MethodDispatcher):
             handle_response=_after_initialize,
         )
 
-        self.server_initialized.wait()
+        if not self.server_initialized.wait(LSP_INIT_TIMEOUT):
+            raise RuntimeError("LSP server did not initialize in time")
 
     def initialized(self, initialized_params=None):
         """Sends the initialized notification to LSP server."""
