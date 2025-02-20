@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { Disposable, env, LogOutputChannel } from 'vscode';
+import { Disposable, env, LogOutputChannel, workspace } from 'vscode';
 import { State } from 'vscode-languageclient';
 import {
     LanguageClient,
@@ -95,6 +95,20 @@ async function createServer(
 }
 
 let _disposables: Disposable[] = [];
+
+function createConfigWatcher(
+    pattern: string,
+    serverId: string,
+    serverName: string,
+    outputChannel: LogOutputChannel,
+    lsClient: LanguageClient
+): Disposable {
+    return workspace.createFileSystemWatcher(pattern).onDidChange(async () => {
+        traceInfo(`Configuration file changed, restarting server...`);
+        await restartServer(serverId, serverName, outputChannel, lsClient);
+    });
+}
+
 export async function restartServer(
     serverId: string,
     serverName: string,
@@ -132,6 +146,15 @@ export async function restartServer(
     );
     try {
         await newLSClient.start();
+        _disposables.push(
+            createConfigWatcher(
+                '**/{tach.toml,tach.domain.toml}',
+                serverId,
+                serverName,
+                outputChannel,
+                newLSClient
+            )
+        );
     } catch (ex) {
         traceError(`Server: Start failed: ${ex}`);
         return undefined;
