@@ -13,6 +13,12 @@ import nox
 
 
 def _install_bundle(session: nox.Session) -> None:
+    session.run(
+        "rm",
+        "-rf",
+        "./bundled/libs",
+        external=True,
+    )
     session.install(
         "-v",
         "-t",
