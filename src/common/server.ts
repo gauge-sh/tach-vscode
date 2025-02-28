@@ -148,7 +148,7 @@ export async function restartServer(
         await newLSClient.start();
         _disposables.push(
             createConfigWatcher(
-                '**/{tach.toml,tach.domain.toml}',
+                '**/{tach.toml,tach.domain.toml,pyproject.toml,requirements.txt}',
                 serverId,
                 serverName,
                 outputChannel,
